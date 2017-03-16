@@ -33,7 +33,12 @@
     [self.view addGestureRecognizer:self.upSwipe];
     [self.view addGestureRecognizer:self.downSwipe];
 
+    timeInt = 20;
+    scoreInt = 0;
+    modeInt = 0;
     
+    self.timeLabel.text = [NSString stringWithFormat:@"Time: %i", timeInt];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i", scoreInt];
     
 }
 
@@ -45,6 +50,44 @@
 
 
 - (IBAction)startGame:(id)sender {
+    
+    if (timeInt == 20) {
+        
+        timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTimer) userInfo:nil repeats:YES];
+        
+        self.startGameButton.enabled = NO;
+        self.startGameButton.alpha = 0.5;
+        
+        
+    }
+    
+    if (timeInt == 0) {
+        
+        timeInt = 20;
+        scoreInt = 0;
+        
+        self.timeLabel.text = [NSString stringWithFormat:@"Time: %i", timeInt];
+        self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i", scoreInt];
+        
+        [self.startGameButton setTitle:@"Start Game" forState:UIControlStateNormal];
+    }
+    
+}
+
+-(void)updateTimer {
+    
+    timeInt -= 1;
+    self.timeLabel.text = [NSString stringWithFormat:@"Time: %i", timeInt];
+    
+    if (timeInt == 0) {
+        
+        [timer invalidate];
+        
+        self.startGameButton.enabled = YES;
+        self.startGameButton.alpha = 1;
+        [self.startGameButton setTitle:@"Restart" forState:UIControlStateNormal];
+        
+    }
 }
 
 -(void)handleSwipes:(UISwipeGestureRecognizer *)sender {
@@ -52,3 +95,9 @@
     
 }
 @end
+
+
+
+
+
+
